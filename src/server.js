@@ -1,7 +1,9 @@
 import express from "express";
 import cors from "cors";
 import listEndpoints from "express-list-endpoints";
-import { testDB } from "./db/index.js";
+import { testDB, syncDB } from "./db/index.js";
+import Product from "./db/models/product.js";
+import Review from "./db/models/review.js";
 
 // *********************************** GLOBAL VARs ***********************************
 const server = express();
@@ -20,6 +22,7 @@ console.table(listEndpoints(server));
 server.listen(port, async () => {
   console.log("✅ Server listening at: " + port);
   await testDB();
+  await syncDB();
 });
 
 server.on("error", (error) => {
