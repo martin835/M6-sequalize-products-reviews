@@ -23,11 +23,11 @@ server.use("/reviews", reviewsRouter);
 console.table(listEndpoints(server));
 
 server.listen(port, async () => {
-  console.log("✅ Server listening at: " + port);
+  console.log("🛫 Server listening at: " + port);
   await testDB();
   await syncDB();
 });
 
 server.on("error", (error) => {
-  console.log("❌ Server not listening due to error: " + error);
+  console.log("⛔️ Server not listening due to error: " + error);
 });

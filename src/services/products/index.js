@@ -18,26 +18,37 @@ router.post("/", async (req, res, next) => {
 
 //2.0 GET ALL - filter by product & description by query
 //localhost:3001/products?name=car&description=orient
+//localhost:3001/products?order=price,ASC
 router.get("/", async (req, res, next) => {
   console.log("🆕PING - request");
-  console.log(req.query);
+  // -- this crashes app when there is no order search param :) =>
+  console.log(req.query.price.split(","));
   try {
     const data = await Product.findAll({
       include: Review,
       where: {
-        [Op.or]: [
-          {
-            name: {
-              [Op.iLike]: `%${req.query.name}%`,
+        ...(req.query.search && {
+          [Op.or]: [
+            {
+              name: {
+                [Op.iLike]: `%${req.query.search}%`,
+              },
             },
-          },
-          {
-            description: {
-              [Op.iLike]: `%${req.query.description}%`,
+            {
+              description: {
+                [Op.iLike]: `%${req.query.search}%`,
+              },
             },
+          ],
+        }),
+        //not working because price after split in the array is string
+        ...(req.query.price && {
+          price: {
+            [Op.between]: req.query.price.split(","),
           },
-        ],
+        }),
       },
+      ...(req.query.order && { order: [req.query.order.split(",")] }),
     });
     res.send(data);
   } catch (error) {
