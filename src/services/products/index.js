@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { Product } from "../../db/models/index.js";
+import { Product, Review } from "../../db/models/index.js";
+import { Op } from "sequelize";
 
 const router = Router();
 
@@ -15,21 +16,66 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-//2 GET ALL
+//2.0 GET ALL - filter by product & description by query
+//localhost:3001/products?name=car&description=orient
 router.get("/", async (req, res, next) => {
   console.log("🆕PING - request");
+  console.log(req.query);
   try {
-    const data = await Product.findAll();
+    const data = await Product.findAll({
+      include: Review,
+      where: {
+        [Op.or]: [
+          {
+            name: {
+              [Op.iLike]: `%${req.query.name}%`,
+            },
+          },
+          {
+            description: {
+              [Op.iLike]: `%${req.query.description}%`,
+            },
+          },
+        ],
+      },
+    });
     res.send(data);
   } catch (error) {
     console.log(error);
   }
 });
+
+//2.1 GET ALL - price range
+//localhost:3001/products/price?p1=0&p2=100
+router.get("/price", async (req, res, next) => {
+  console.log("🆕PING - request");
+  console.log(typeof parseInt(req.query.p1), parseInt(req.query.p1));
+  console.log(typeof parseInt(req.query.p2), parseInt(req.query.p2));
+  try {
+    const data = await Product.findAll({
+      include: Review,
+      where: {
+        price: {
+          [Op.between]: [
+            `${parseInt(req.query.p1)}`,
+            `${parseInt(req.query.p2)}`,
+          ],
+        },
+      },
+    });
+    res.send(data);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 //3 GET ONE
 router.get("/:id", async (req, res, next) => {
   console.log("🆕PING - request");
   try {
-    const oneProduct = await Product.findByPk(req.params.id);
+    const oneProduct = await Product.findByPk(req.params.id, {
+      include: Review,
+    });
     res.send(oneProduct);
   } catch (error) {
     console.log(error);
