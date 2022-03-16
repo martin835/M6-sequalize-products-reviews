@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import listEndpoints from "express-list-endpoints";
+import { testDB } from "./db/index.js";
 
 // *********************************** GLOBAL VARs ***********************************
 const server = express();
@@ -16,8 +17,9 @@ server.use(express.json());
 //********************************** SERVER RUNNING *********************************
 console.table(listEndpoints(server));
 
-server.listen(port, () => {
+server.listen(port, async () => {
   console.log("✅ Server listening at: " + port);
+  await testDB();
 });
 
 server.on("error", (error) => {
