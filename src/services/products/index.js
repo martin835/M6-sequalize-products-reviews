@@ -1,5 +1,11 @@
 import { Router } from "express";
-import { Product, Review, ProductCategory } from "../../db/models/index.js";
+import {
+  Product,
+  Review,
+  ProductCategory,
+  Category,
+  User,
+} from "../../db/models/index.js";
 import { Op } from "sequelize";
 
 const router = Router();
@@ -17,7 +23,7 @@ router.post("/", async (req, res, next) => {
       categoryId: categoryId,
     });
 
-    res.send(newProduct);
+    res.send(newProduct, productCategory);
   } catch (error) {
     console.log(error);
   }
@@ -31,9 +37,12 @@ router.get("/", async (req, res, next) => {
   // -- this crashes app when there is no order search param :) =>
   //console.log(req.query.price.split(","));
   try {
-    const data = await Product.findAll(/* {
-      include: Review,
-      where: {
+    const data = await Product.findAll({
+      include: [
+        { model: Category, through: { attributes: [] } },
+        { model: Review, include: User },
+      ],
+      /*  where: {
         ...(req.query.search && {
           [Op.or]: [
             {
@@ -55,8 +64,8 @@ router.get("/", async (req, res, next) => {
           },
         }),
       },
-      ...(req.query.order && { order: [req.query.order.split(",")] }),
-    } */);
+      ...(req.query.order && { order: [req.query.order.split(",")] }), */
+    });
     res.send(data);
   } catch (error) {
     console.log(error);
