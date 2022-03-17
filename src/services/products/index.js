@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { Product, Review } from "../../db/models/index.js";
+import { Product, Review, ProductCategory } from "../../db/models/index.js";
 import { Op } from "sequelize";
 
 const router = Router();
@@ -9,7 +9,14 @@ router.post("/", async (req, res, next) => {
   console.log("🆕PING - request");
   try {
     console.log(req.body);
-    const newProduct = await Product.create(req.body);
+    const { categoryId, ...rest } = req.body;
+    const newProduct = await Product.create(rest);
+
+    const productCategory = await ProductCategory.create({
+      ProductId: newProduct.id,
+      categoryId: categoryId,
+    });
+
     res.send(newProduct);
   } catch (error) {
     console.log(error);
@@ -24,7 +31,7 @@ router.get("/", async (req, res, next) => {
   // -- this crashes app when there is no order search param :) =>
   //console.log(req.query.price.split(","));
   try {
-    const data = await Product.findAll({
+    const data = await Product.findAll(/* {
       include: Review,
       where: {
         ...(req.query.search && {
@@ -49,7 +56,7 @@ router.get("/", async (req, res, next) => {
         }),
       },
       ...(req.query.order && { order: [req.query.order.split(",")] }),
-    });
+    } */);
     res.send(data);
   } catch (error) {
     console.log(error);

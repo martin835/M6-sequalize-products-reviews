@@ -11,10 +11,6 @@ const Product = sequelize.define("Product", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  category: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
   description: {
     type: DataTypes.TEXT,
     allowNull: false,
@@ -28,5 +24,7 @@ const Product = sequelize.define("Product", {
     allowNull: false,
   },
 });
+
+/* Product.sync({ force: true }); */
 
 export default Product;
