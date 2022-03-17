@@ -22,7 +22,7 @@ router.post("/", async (req, res, next) => {
 router.get("/", async (req, res, next) => {
   console.log("🆕PING - request");
   // -- this crashes app when there is no order search param :) =>
-  console.log(req.query.price.split(","));
+  //console.log(req.query.price.split(","));
   try {
     const data = await Product.findAll({
       include: Review,

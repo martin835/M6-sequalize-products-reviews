@@ -4,9 +4,12 @@ import listEndpoints from "express-list-endpoints";
 import { testDB, syncDB } from "./db/index.js";
 import Product from "./db/models/product.js";
 import Review from "./db/models/review.js";
+import User from "./db/models/user.js";
+import Category from "./db/models/category.js";
 import * as models from "./db/models/index.js";
 import productsRouter from "./services/products/index.js";
 import reviewsRouter from "./services/reviews/index.js";
+import usersRouter from "./services/users/index.js";
 // *********************************** GLOBAL VARs ***********************************
 const server = express();
 const { port = 5001 } = process.env;
@@ -17,6 +20,7 @@ server.use(express.json());
 // *********************************** ENDPOINTS *************************************
 server.use("/products", productsRouter);
 server.use("/reviews", reviewsRouter);
+server.use("/users", usersRouter);
 // ********************************** ERROR HANDLERS *********************************
 
 //********************************** SERVER RUNNING *********************************
