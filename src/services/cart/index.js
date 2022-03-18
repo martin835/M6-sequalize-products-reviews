@@ -36,10 +36,15 @@ router.post("/:customerId", async (req, res, next) => {
 
 //3 Delete a Product by a Customer by ProductId
 
-router.delete("/:customerId/:productId", async (req, res, next) => {
+router.delete("/:id", async (req, res, next) => {
   console.log("🆕PING - request");
   try {
-    res.send();
+    const removedCartItem = await ShoppingCart.destroy({
+      where: { id: req.params.id },
+    });
+
+    console.log(removedCartItem);
+    res.send({ removedCartItem });
   } catch (error) {
     console.log(error);
   }
