@@ -52,6 +52,8 @@ router.get("/", async (req, res, next) => {
         },
         { model: Review, include: Customer },
       ],
+      limit: 10,
+      offset: 0,
 
       /*  where: {
         ...(req.query.search && {
