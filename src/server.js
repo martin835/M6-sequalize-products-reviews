@@ -14,7 +14,7 @@ import categoriesRouter from "./services/categories/index.js";
 import cartRouter from "./services/cart/index.js";
 // *********************************** GLOBAL VARs ***********************************
 const server = express();
-const { port = 5001 } = process.env;
+const { PORT = 5001 } = process.env;
 
 // *********************************** MIDDLEWARES ***********************************
 server.use(cors());
@@ -30,8 +30,8 @@ server.use("/cart", cartRouter);
 //********************************** SERVER RUNNING *********************************
 console.table(listEndpoints(server));
 
-server.listen(port, async () => {
-  console.log("🛫 Server listening at: " + port);
+server.listen(PORT, async () => {
+  console.log("🛫 Server listening at: " + PORT);
   await testDB();
   await syncDB();
 });
