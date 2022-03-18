@@ -11,7 +11,7 @@ const sequelize = new Sequelize(PGDATABASE, PGUSER, PGPASSWORD, {
     dialectOptions: {
       ssl: {
         required: true,
-        rejectUnAuthorized: false,
+        rejectUnauthorized: false,
       },
     },
   }),
