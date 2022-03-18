@@ -20,7 +20,7 @@ router.post("/", async (req, res, next) => {
     const newProduct = await Product.create(rest);
 
     const productCategory = await ProductCategory.create({
-      ProductId: newProduct.id,
+      productId: newProduct.id,
       categoryId: categoryId,
     });
 
@@ -36,14 +36,23 @@ router.post("/", async (req, res, next) => {
 //localhost:3001/products?order=price,ASC
 router.get("/", async (req, res, next) => {
   console.log("🆕PING - request");
-  // -- this crashes app when there is no order search param :) =>
-  //console.log(req.query.price.split(","));
+  // -- this crashes app when there is no order search param :) =>console.log(req.query.category.split(","));
+
   try {
     const data = await Product.findAll({
       include: [
-        { model: Category, through: { attributes: [] } },
+        {
+          model: Category,
+          through: { attributes: [] },
+          where: {
+            ...(req.query.category && {
+              name: { [Op.in]: req.query.category.split(",") },
+            }),
+          },
+        },
         { model: Review, include: Customer },
       ],
+
       /*  where: {
         ...(req.query.search && {
           [Op.or]: [
