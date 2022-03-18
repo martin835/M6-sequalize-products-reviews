@@ -1,17 +1,17 @@
 import sequelize from "../index.js";
 import { DataTypes } from "sequelize";
 
-const User = sequelize.define("user", {
+const Customer = sequelize.define("customer", {
   id: {
     primaryKey: true,
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
   },
-  firstName: {
+  first_name: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  lastName: {
+  last_name: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -21,4 +21,4 @@ const User = sequelize.define("user", {
   },
 });
 
-export default User;
+export default Customer;

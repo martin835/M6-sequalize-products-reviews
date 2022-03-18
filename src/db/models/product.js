@@ -1,7 +1,7 @@
 import sequelize from "../index.js";
 import { DataTypes } from "sequelize";
 
-const Product = sequelize.define("Product", {
+const Product = sequelize.define("product", {
   id: {
     primaryKey: true,
     type: DataTypes.UUID,

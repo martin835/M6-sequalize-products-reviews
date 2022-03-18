@@ -4,7 +4,7 @@ import {
   Review,
   ProductCategory,
   Category,
-  User,
+  Customer,
 } from "../../db/models/index.js";
 import { Op } from "sequelize";
 
@@ -23,7 +23,8 @@ router.post("/", async (req, res, next) => {
       categoryId: categoryId,
     });
 
-    res.send(newProduct, productCategory);
+    //res.status(201).send(newProduct, productCategory);  --> DOESN'T work - something wrong with send()  object
+    res.status(201).send(newProduct);
   } catch (error) {
     console.log(error);
   }
@@ -40,7 +41,7 @@ router.get("/", async (req, res, next) => {
     const data = await Product.findAll({
       include: [
         { model: Category, through: { attributes: [] } },
-        { model: Review, include: User },
+        { model: Review, include: Customer },
       ],
       /*  where: {
         ...(req.query.search && {

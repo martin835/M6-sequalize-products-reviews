@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { User } from "../../db/models/index.js";
+import { Customer } from "../../db/models/index.js";
 
 const router = Router();
 
@@ -8,8 +8,8 @@ router.post("/", async (req, res, next) => {
   console.log("🆕PING - request");
   try {
     console.log(req.body);
-    const newUser = await User.create(req.body);
-    res.send(newUser);
+    const newCustomer = await Customer.create(req.body);
+    res.send(newCustomer);
   } catch (error) {
     console.log(error);
   }
@@ -19,18 +19,32 @@ router.post("/", async (req, res, next) => {
 router.get("/", async (req, res, next) => {
   console.log("🆕PING - request");
   try {
-    const data = await User.findAll();
+    const data = await Customer.findAll();
     res.send(data);
   } catch (error) {
     console.log(error);
   }
 });
+
+//2.1 GET STATS
+router.get("/stats", async (req, res, next) => {
+  console.log("🆕PING - request");
+
+  try {
+    const data = await Customer.findAll();
+
+    res.send(data);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 //3 GET ONE
 router.get("/:id", async (req, res, next) => {
   console.log("🆕PING - request");
   try {
-    const oneUser = await User.findByPk(req.params.id);
-    res.send(oneUser);
+    const oneCustomer = await Customer.findByPk(req.params.id);
+    res.send(oneCustomer);
   } catch (error) {
     console.log(error);
   }
@@ -39,14 +53,14 @@ router.get("/:id", async (req, res, next) => {
 router.put("/:id", async (req, res, next) => {
   console.log("🆕PING - request");
   try {
-    const updatedUser = await User.update(req.body, {
+    const updatedCustomer = await Customer.update(req.body, {
       where: {
         id: req.params.id,
       },
       returning: true,
     });
 
-    res.send(updatedUser[1][0]);
+    res.send(updatedCustomer[1][0]);
   } catch (error) {
     console.log(error);
   }
@@ -55,11 +69,11 @@ router.put("/:id", async (req, res, next) => {
 router.delete("/:id", async (req, res, next) => {
   console.log("🆕PING - request");
   try {
-    const deletedUser = await User.destroy({
+    const deletedCustomer = await Customer.destroy({
       where: { id: req.params.id },
     });
-    console.log(deletedUser);
-    res.send({ deletedUser });
+    console.log(deletedCustomer);
+    res.send({ deletedCustomer });
   } catch (error) {
     console.log(error);
   }
