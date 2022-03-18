@@ -5,6 +5,7 @@ import {
   ProductCategory,
   Category,
   Customer,
+  ShoppingCart,
 } from "../../db/models/index.js";
 import { Op } from "sequelize";
 

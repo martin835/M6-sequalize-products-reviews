@@ -11,6 +11,7 @@ import productsRouter from "./services/products/index.js";
 import reviewsRouter from "./services/reviews/index.js";
 import customersRouter from "./services/customers/index.js";
 import categoriesRouter from "./services/categories/index.js";
+import cartRouter from "./services/cart/index.js";
 // *********************************** GLOBAL VARs ***********************************
 const server = express();
 const { port = 5001 } = process.env;
@@ -23,6 +24,7 @@ server.use("/products", productsRouter);
 server.use("/reviews", reviewsRouter);
 server.use("/customers", customersRouter);
 server.use("/categories", categoriesRouter);
+server.use("/cart", cartRouter);
 // ********************************** ERROR HANDLERS *********************************
 
 //********************************** SERVER RUNNING *********************************
