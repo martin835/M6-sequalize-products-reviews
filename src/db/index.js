@@ -1,11 +1,20 @@
 import { Sequelize } from "sequelize";
 
-const { PGHOST, PGUSER, PGPORT, PGPASSWORD, PGDATABASE } = process.env;
+const { PGHOST, PGUSER, PGPORT, PGPASSWORD, PGDATABASE, NODE_ENV } =
+  process.env;
 
 const sequelize = new Sequelize(PGDATABASE, PGUSER, PGPASSWORD, {
   host: PGHOST,
   port: PGPORT,
   dialect: "postgres",
+  ...(NODE_ENV === "production" && {
+    dialectOptions: {
+      ssl: {
+        required: true,
+        rejectUnAuthorized: false,
+      },
+    },
+  }),
 });
 
 export const testDB = async () => {
