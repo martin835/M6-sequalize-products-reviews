@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { ShoppingCart } from "../../db/models/index.js";
+import { ShoppingCart, Product } from "../../db/models/index.js";
+import sequelize from "sequelize";
 
 const router = Router();
 
@@ -8,7 +9,31 @@ const router = Router();
 router.get("/:customerId", async (req, res, next) => {
   console.log("🆕PING - request");
   try {
-    res.send();
+    const data = await ShoppingCart.findAll({
+      include: Product,
+      attributes: [
+        "productId",
+        [sequelize.fn("count", sequelize.col("shopping_cart.id")), "unitQty"],
+        [sequelize.fn("sum", sequelize.col("product.price")), "unitTotalPrice"],
+      ],
+      group: ["productId", "product.id"],
+      where: { customerId: req.params.customerId },
+    });
+
+    const totalQty = await ShoppingCart.count({
+      where: {
+        customerId: req.params.customerId,
+      },
+    });
+
+    const totalSum = await ShoppingCart.sum("product.price", {
+      include: { model: Product, attributes: [] },
+      where: {
+        customerId: req.params.customerId,
+      },
+    });
+
+    res.send({ data, totalQty, totalSum });
   } catch (error) {
     console.log(error);
   }
